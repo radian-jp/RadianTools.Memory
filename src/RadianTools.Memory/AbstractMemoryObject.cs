@@ -8,14 +8,14 @@ namespace RadianTools.Memory
 {
     public abstract class AbstractMemoryObject<T> : IMemoryObject<T> where T : struct, IEquatable<T>
     {
-        public virtual unsafe T this[int index]
+        public virtual T this[int index]
         {
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             get
             {
                 if ((uint)index >= Length) throw new IndexOutOfRangeException();
 
-                return Unsafe.Add(ref Unsafe.AsRef<T>((void*)Pointer), index);
+                unsafe { return Unsafe.Add(ref Unsafe.AsRef<T>((void*)Pointer), index); }
             }
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -23,7 +23,7 @@ namespace RadianTools.Memory
             {
                 if ((uint)index >= Length) throw new IndexOutOfRangeException();
 
-                Unsafe.Add(ref Unsafe.AsRef<T>((void*)Pointer), index) = value;
+                unsafe { Unsafe.Add(ref Unsafe.AsRef<T>((void*)Pointer), index) = value; }
             }
         }
 
